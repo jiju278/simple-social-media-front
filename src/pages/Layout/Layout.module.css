@@ -1,0 +1,15 @@
+.container {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  place-items: center;
+  border-bottom: 1px solid #e8e9eb;
+}
+
+.logo {
+  height: 36px;
+  width: 36px;
+}
+
+.pageTitle {
+  font-size: 20px;
+}
