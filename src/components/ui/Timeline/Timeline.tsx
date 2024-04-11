@@ -8,6 +8,8 @@ const Timeline = () => {
       <TimelineMessage />
       <TimelineMessage />
       <TimelineMessage />
+      <TimelineMessage />
+      <TimelineMessage />
     </div>
   );
 };

@@ -20,4 +20,15 @@
 .sideNav {
   display: grid;
   gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+@media (min-width: 43em) {
+  .pageContent {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    align-items: start;
+    justify-items: start;
+    padding: 2rem;
+  }
 }
