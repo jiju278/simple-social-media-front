@@ -1,7 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
 import logo from '@assets/Frame.png';
 import style from './Layout.module.css';
-import Badge from '@/components/ui/badge/Badge';
+import Badge from '@/components/ui/Badge/Badge';
+import Navbutton from '@/components/ui/Navbutton/Navbutton';
 
 function Layout() {
   return (
@@ -12,6 +13,8 @@ function Layout() {
       </header>
 
       <Badge />
+      <Navbutton />
+
       <div className="navbar-section">
         <nav className="navbar">
           <div>

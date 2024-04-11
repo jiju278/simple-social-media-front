@@ -1,4 +1,4 @@
-import style from '@components/ui/badge/Badge.module.css';
+import style from '@components/ui/Badge/Badge.module.css';
 
 const Badge = () => {
   return (
