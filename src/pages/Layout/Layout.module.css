@@ -13,3 +13,11 @@
 .pageTitle {
   font-size: 20px;
 }
+
+.pageContent {
+  padding: 1.2rem;
+}
+.sideNav {
+  display: grid;
+  gap: 1rem;
+}
