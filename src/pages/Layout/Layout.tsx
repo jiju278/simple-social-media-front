@@ -1,9 +1,10 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import logo from '@assets/Frame.png';
 import style from './Layout.module.css';
 import Badge from '@/components/ui/Badge/Badge';
-import Navbutton from '@/components/ui/Navbutton/Navbutton';
+
 import Button from '@/components/ui/Button/Button';
+import Navbar from '@/components/ui/Navbar/Navbar';
 
 function Layout() {
   return (
@@ -14,17 +15,10 @@ function Layout() {
       </header>
 
       <Badge />
-      <Navbutton />
+      <Navbar />
       <Button color="primary" title="Create new post" />
       <Button color="dark" title="Sign out" />
 
-      <div className="navbar-section">
-        <nav className="navbar">
-          <div>
-            <Link to="/">Home</Link>
-          </div>
-        </nav>
-      </div>
       <main>
         <Outlet />
       </main>
