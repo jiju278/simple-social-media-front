@@ -1,0 +1,16 @@
+.button {
+  border: none;
+  padding: 0.7rem 1.5rem;
+
+  font-weight: 600;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.primaryColor {
+  background-color: #7b61ff;
+}
+
+.darkColor {
+  background-color: #000000;
+}

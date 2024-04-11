@@ -3,6 +3,7 @@ import logo from '@assets/Frame.png';
 import style from './Layout.module.css';
 import Badge from '@/components/ui/Badge/Badge';
 import Navbutton from '@/components/ui/Navbutton/Navbutton';
+import Button from '@/components/ui/Button/Button';
 
 function Layout() {
   return (
@@ -14,6 +15,8 @@ function Layout() {
 
       <Badge />
       <Navbutton />
+      <Button color="primary" title="Create new post" />
+      <Button color="dark" title="Sign out" />
 
       <div className="navbar-section">
         <nav className="navbar">
