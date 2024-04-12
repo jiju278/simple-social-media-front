@@ -23,6 +23,10 @@
   margin-bottom: 1.4rem;
 }
 
+.mainContent {
+  width: 100%;
+}
+
 @media (min-width: 43em) {
   .pageContent {
     display: grid;

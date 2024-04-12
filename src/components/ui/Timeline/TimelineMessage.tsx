@@ -3,15 +3,22 @@ import style from '@components/ui/Timeline/TimelineMessage.module.css';
 import { AiOutlineLike } from 'react-icons/ai';
 import { AiOutlineDislike } from 'react-icons/ai';
 
-const TimelineMessage = () => {
+const TimelineMessage = ({
+  message,
+}: {
+  message: {
+    id: string;
+    userId: string;
+    username: string;
+    profilePictureUrl: string;
+    publishedAt: string;
+    text: string;
+  };
+}) => {
   return (
     <div className={style.container}>
-      <Badge />
-      <p>
-        Je ne combats pas les personnes, je m'attaque aux idées. Tenir ce genre
-        de position, c'est appartenir au camp des personnes raisonnables, voire
-        à celui du bien. L'idée est de s'auto-positionner au-dessus des
-      </p>
+      <Badge userId={message.userId} username={message.username} />
+      <p>{message.text}</p>
       <div className={style.footer}>
         <AiOutlineLike className={style.thumb} />
         <AiOutlineDislike className={style.thumb} />

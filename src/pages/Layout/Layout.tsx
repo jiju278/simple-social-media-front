@@ -15,13 +15,13 @@ function Layout() {
 
       <div className={style.pageContent}>
         <div className={style.sideNav}>
-          <Badge />
+          <Badge userId="" username="" />
           <Navbar />
           <Button color="primary" title="Create new post" />
           <Button color="dark" title="Sign out" />
         </div>
 
-        <main>
+        <main className={style.mainContent}>
           <Outlet />
         </main>
       </div>

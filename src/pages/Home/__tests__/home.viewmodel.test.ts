@@ -1,15 +1,20 @@
 import { createTestStore } from '@/lib/create-store';
-import { selectHomeViewModel } from '@/pages/Home/Home.viewmodel';
+import {
+  HomeViewModelType,
+  selectHomeViewModel,
+} from '@/pages/Home/Home.viewmodel';
 import { describe, test, expect } from 'vitest';
+
+const getNow = () => '2024-04-12T14:03.000Z';
 
 describe('Home view model', () => {
   test('Example: there is no timeline in the store', () => {
     const store = createTestStore();
-    const homeViewModel = selectHomeViewModel(store.getState());
+    const homeViewModel = selectHomeViewModel(store.getState(), getNow);
 
     expect(homeViewModel).toEqual({
       timeline: {
-        info: 'NO_TIMELINE',
+        type: HomeViewModelType.NoTimeline,
       },
     });
   });
@@ -31,11 +36,11 @@ describe('Home view model', () => {
       }
     );
 
-    const homeViewModel = selectHomeViewModel(store.getState());
+    const homeViewModel = selectHomeViewModel(store.getState(), getNow);
 
     expect(homeViewModel).toEqual({
       timeline: {
-        type: 'EMPTY_TIMELINE',
+        type: HomeViewModelType.EmptyTimeline,
         info: 'There is no message yet',
       },
     });
@@ -69,18 +74,18 @@ describe('Home view model', () => {
       }
     );
 
-    const homeViewModel = selectHomeViewModel(store.getState());
+    const homeViewModel = selectHomeViewModel(store.getState(), getNow);
 
     expect(homeViewModel).toEqual({
       timeline: {
-        type: 'TIMELINE_WITH_MESSAGES',
+        type: HomeViewModelType.WithMessages,
         messages: [
           {
             id: 'msg1-id',
             userId: 'Bob',
             username: 'Bob',
-            profilePicture: 'https://picsum.photos/200?random=Bob',
-            publishedAt: '2024-04-12T13:03:00.000Z',
+            profilePictureUrl: 'https://picsum.photos/200?random=Bob',
+            publishedAt: '1 hour ago',
             text: "Hi it's Bob",
           },
         ],
@@ -128,26 +133,26 @@ describe('Home view model', () => {
       }
     );
 
-    const homeViewModel = selectHomeViewModel(store.getState());
+    const homeViewModel = selectHomeViewModel(store.getState(), getNow);
 
     expect(homeViewModel).toEqual({
       timeline: {
-        type: 'TIMELINE_WITH_MESSAGES',
+        type: HomeViewModelType.WithMessages,
         messages: [
           {
             id: 'msg1-id',
             username: 'Bob',
             userId: 'Bob',
-            profilePicture: 'https://picsum.photos/200?random=Bob',
-            publishedAt: '2024-04-12T13:03:00.000Z',
+            profilePictureUrl: 'https://picsum.photos/200?random=Bob',
+            publishedAt: '1 hour ago',
             text: "Hi it's Bob",
           },
           {
             id: 'msg2-id',
             username: 'Alice',
             userId: 'Alice',
-            profilePicture: 'https://picsum.photos/200?random=Alice',
-            publishedAt: '2024-04-12T13:25:00.000Z',
+            profilePictureUrl: 'https://picsum.photos/200?random=Alice',
+            publishedAt: '38 minutes ago',
             text: 'Hi Bob!',
           },
         ],
