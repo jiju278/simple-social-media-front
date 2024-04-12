@@ -1,6 +1,8 @@
 import { FakeAuthGateway } from '@/lib/auth/infra/fake-auth-gateway';
 import { createStore } from '@/lib/create-store';
 import { FakeTimelineGateway } from '@/lib/timelines/infra/fake-timeline.gateway';
+import { selectMessage } from '@/lib/timelines/slices/messages.slice';
+import { selectTimeline } from '@/lib/timelines/slices/timelines.slice';
 import { getAuthUserTimeline } from '@/lib/timelines/usecases/get-auth-user-timeline.usecase';
 import { describe, it, expect } from 'vitest';
 
@@ -8,14 +10,17 @@ describe("Feature: Retrieving authenticated user's timeline", () => {
   it('Scenario: Alice is authenticated and can see her timeline', async () => {
     givenAuthenticatedUserId('Alice');
     givenExistingTimeline({
+      id: 'alice-timeline-id',
       user: 'Alice',
       messages: [
         {
+          id: 'msg1-id',
           text: "Hello it's Bob",
           author: 'Bob',
           publishedAt: '2024-04-11T17:30:00.000Z',
         },
         {
+          id: 'msg2-id',
           text: "Hello it's Alice",
           author: 'Alice',
           publishedAt: '2024-04-11T17:25:00.000Z',
@@ -24,14 +29,17 @@ describe("Feature: Retrieving authenticated user's timeline", () => {
     });
     await whenRetrievingAuthenticatedUserTimeline();
     thenTheReceivedTimelineShouldBe({
+      id: 'alice-timeline-id',
       user: 'Alice',
       messages: [
         {
+          id: 'msg1-id',
           text: "Hello it's Bob",
           author: 'Bob',
           publishedAt: '2024-04-11T17:30:00.000Z',
         },
         {
+          id: 'msg2-id',
           text: "Hello it's Alice",
           author: 'Alice',
           publishedAt: '2024-04-11T17:25:00.000Z',
@@ -50,8 +58,10 @@ function givenAuthenticatedUserId(user: string) {
 }
 
 function givenExistingTimeline(timeline: {
+  id: string;
   user: string;
   messages: {
+    id: string;
     text: string;
     author: string;
     publishedAt: string;
@@ -65,13 +75,26 @@ async function whenRetrievingAuthenticatedUserTimeline() {
 }
 
 function thenTheReceivedTimelineShouldBe(expectedTimeline: {
+  id: string;
   user: string;
   messages: {
+    id: string;
     text: string;
     author: string;
     publishedAt: string;
   }[];
 }) {
-  const authUserTimeline = store.getState();
-  expect(authUserTimeline).toEqual(expectedTimeline);
+  const authUserTimeline = selectTimeline(
+    expectedTimeline.id,
+    store.getState()
+  );
+  expect(authUserTimeline).toEqual({
+    id: expectedTimeline.id,
+    user: expectedTimeline.user,
+    messages: expectedTimeline.messages.map((m) => m.id),
+  });
+
+  expectedTimeline.messages.forEach((msg) => {
+    expect(selectMessage(msg.id, store.getState())).toEqual(msg);
+  });
 }

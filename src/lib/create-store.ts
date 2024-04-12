@@ -1,6 +1,6 @@
 import { AuthGateway } from '@/lib/auth/model/auth.gateway';
 import { TimelineGateway } from '@/lib/timelines/model/timeline.gateway';
-import { timelinesSlice } from '@/lib/timelines/slices/timelines.slice';
+import { reducer as timelinesReducer } from '@/lib/timelines/reducer';
 import { configureStore } from '@reduxjs/toolkit';
 
 export type Dependencies = {
@@ -8,7 +8,8 @@ export type Dependencies = {
   timelineGateway: TimelineGateway;
 };
 
-const rootReducer = timelinesSlice.reducer;
+const rootReducer = timelinesReducer;
+
 export const createStore = (dependencies: Dependencies) =>
   configureStore({
     reducer: rootReducer,
