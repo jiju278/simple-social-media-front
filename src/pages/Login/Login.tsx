@@ -1,8 +1,5 @@
 import Button from '@/components/ui/Button/Button';
-import {
-  selectIsUserAuthenticated,
-  userAuthenticated,
-} from '@/lib/auth/reducer';
+import { selectIsUserAuthenticated } from '@/lib/auth/reducer';
 import { authenticate } from '@/lib/auth/usecases/authenticate.usecase';
 import { AppDispatch } from '@/lib/create-store';
 import logo from '@assets/white_frame.png';
@@ -31,9 +28,6 @@ const Login = () => {
     }
   }, [isUserAuthenticated, navigate]);
 
-  if (!userAuthenticated) {
-    return null;
-  }
   return (
     <div className={style.container}>
       <div className={style['logo-section']}>

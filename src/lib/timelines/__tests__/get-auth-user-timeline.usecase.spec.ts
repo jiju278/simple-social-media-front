@@ -59,7 +59,6 @@ let store: AppStore;
 
 function givenAuthenticatedUserId(user: string) {
   testStateBuilder = testStateBuilder.withAuthUser({ authUser: user });
-  authGateway.authUser = user;
 }
 
 function givenExistingTimeline(timeline: {
