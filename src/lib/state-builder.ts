@@ -26,7 +26,7 @@ const withAuthUser = createAction<{ authUser: string }>('withAuthUser');
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(withTimeline, (state, action) => {
-      timelinesAdapter.addOne(state.timelines.timelines, action.payload);
+      timelinesAdapter.upsertOne(state.timelines.timelines, action.payload);
     })
     .addCase(withLoadingTimelineOf, (state, action) => {
       state.timelines.timelines.loadingTimelineByUser[action.payload.user] =
@@ -61,3 +61,19 @@ export const stateBuilder = (baseState = initialState) => {
     },
   };
 };
+
+export const stateBuilderProvider = () => {
+  let builder = stateBuilder();
+
+  return {
+    getState() {
+      return builder.build();
+    },
+    setState(updateFn: (_builder: StateBuilder) => StateBuilder) {
+      builder = updateFn(builder);
+    },
+  };
+};
+
+export type StateBuilder = ReturnType<typeof stateBuilder>;
+export type StateBuilderProvider = ReturnType<typeof stateBuilderProvider>;

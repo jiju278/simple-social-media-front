@@ -7,6 +7,7 @@ import {
   getAuthUserTimeline,
   getAuthUserTimelinePending,
 } from '@/lib/timelines/usecases/get-auth-user-timeline.usecase';
+import { postMessage } from '@/lib/timelines/usecases/post-message.usecase';
 import { EntityState, createSlice } from '@reduxjs/toolkit';
 
 export type TimelineSliceState = EntityState<Timeline> & {
@@ -22,6 +23,14 @@ export const timelinesSlice = createSlice({
     builder
       .addCase(getAuthUserTimelinePending, (state, action) => {
         state.loadingTimelineByUser[action.payload.authUser] = true;
+      })
+      .addCase(postMessage.pending, (state, action) => {
+        timelinesAdapter.updateOne(state, {
+          id: action.meta.arg.timelineId,
+          changes: {
+            messages: [action.meta.arg.messageId],
+          },
+        });
       })
       .addCase(getAuthUserTimeline.fulfilled, (state, action) => {
         const timeline = action.payload;
