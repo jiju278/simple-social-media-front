@@ -1,11 +1,8 @@
 import { FakeAuthGateway } from '@/lib/auth/infra/fake-auth-gateway';
 import { createStore } from '@/lib/create-store';
+import { stateBuilder } from '@/lib/state-builder';
 import { FakeTimelineGateway } from '@/lib/timelines/infra/fake-timeline.gateway';
-import { selectMessage } from '@/lib/timelines/slices/messages.slice';
-import {
-  selectIsUserTimelineLoading,
-  selectTimeline,
-} from '@/lib/timelines/slices/timelines.slice';
+import { selectIsUserTimelineLoading } from '@/lib/timelines/slices/timelines.slice';
 import { getAuthUserTimeline } from '@/lib/timelines/usecases/get-auth-user-timeline.usecase';
 import { describe, it, expect } from 'vitest';
 
@@ -90,19 +87,17 @@ function thenTheReceivedTimelineShouldBe(expectedTimeline: {
     publishedAt: string;
   }[];
 }) {
-  const authUserTimeline = selectTimeline(
-    expectedTimeline.id,
-    store.getState()
-  );
-  expect(authUserTimeline).toEqual({
-    id: expectedTimeline.id,
-    user: expectedTimeline.user,
-    messages: expectedTimeline.messages.map((m) => m.id),
-  });
+  const expectedState = stateBuilder()
+    .withTimeline({
+      id: expectedTimeline.id,
+      user: expectedTimeline.user,
+      messages: expectedTimeline.messages.map((m) => m.id),
+    })
+    .withMessages(expectedTimeline.messages)
+    .withNotLoadingTimelineOf({ user: expectedTimeline.user })
+    .build();
 
-  expectedTimeline.messages.forEach((msg) => {
-    expect(selectMessage(msg.id, store.getState())).toEqual(msg);
-  });
+  expect(store.getState()).toEqual(expectedState);
 }
 
 function thenTheTimelineOfUserShouldBeLoading(user: string) {
