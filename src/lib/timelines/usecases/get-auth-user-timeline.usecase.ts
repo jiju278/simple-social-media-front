@@ -1,5 +1,6 @@
 import { selectAuthUser } from '@/lib/auth/reducer';
 import { createAppAsyncThunk } from '@/lib/create-app-thunk';
+import { selectIsUserTimelineLoading } from '@/lib/timelines/slices/timelines.slice';
 import { createAction } from '@reduxjs/toolkit';
 
 export const getAuthUserTimelinePending = createAction<{ authUser: string }>(
@@ -16,5 +17,16 @@ export const getAuthUserTimeline = createAppAsyncThunk(
     });
 
     return timeline;
+  },
+  {
+    condition(_, { getState }) {
+      const authUser = selectAuthUser(getState());
+      const isTimelineLoading = selectIsUserTimelineLoading(
+        authUser,
+        getState()
+      );
+
+      return !isTimelineLoading;
+    },
   }
 );
