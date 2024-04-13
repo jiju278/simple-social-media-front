@@ -6,9 +6,12 @@ import { createStore } from '@/lib/create-store.ts';
 import { FakeAuthGateway } from '@/lib/auth/infra/fake-auth-gateway.ts';
 import { FakeTimelineGateway } from '@/lib/timelines/infra/fake-timeline.gateway.ts';
 import { createRouter } from '@/router.tsx';
+import { stateBuilder } from '@/lib/state-builder.ts';
 
 const authGateway = new FakeAuthGateway();
 authGateway.authUser = 'Alice';
+authGateway.willSucceedForAuthForUser = 'Alice';
+
 const timelineGateway = new FakeTimelineGateway(1000);
 timelineGateway.timelinesByUser.set('Alice', {
   id: 'alice-timeline-id',
@@ -29,10 +32,13 @@ timelineGateway.timelinesByUser.set('Alice', {
   ],
 });
 
-const store = createStore({
-  authGateway,
-  timelineGateway,
-});
+const store = createStore(
+  {
+    authGateway,
+    timelineGateway,
+  },
+  stateBuilder().withAuthUser({ authUser: 'Alice' }).build()
+);
 
 const router = createRouter({ store });
 
