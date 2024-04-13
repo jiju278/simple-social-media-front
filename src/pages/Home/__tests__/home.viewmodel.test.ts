@@ -32,6 +32,7 @@ describe('Home view model', () => {
               user: 'Alice',
             },
           },
+          loadingTimelineByUser: {},
         },
       }
     );
@@ -59,6 +60,7 @@ describe('Home view model', () => {
               user: 'Alice',
             },
           },
+          loadingTimelineByUser: {},
         },
         messages: {
           ids: ['msg1-id'],
@@ -106,6 +108,7 @@ describe('Home view model', () => {
               user: 'Alice',
             },
           },
+          loadingTimelineByUser: {},
         },
         messages: {
           ids: ['msg1-id', 'msg2-id', 'msg3-id'],
@@ -156,6 +159,28 @@ describe('Home view model', () => {
             text: 'Hi Bob!',
           },
         ],
+      },
+    });
+  });
+
+  test('The timeline is loading', () => {
+    const store = createTestStore(
+      {},
+      {
+        timelines: {
+          ids: [],
+          entities: {},
+          loadingTimelineByUser: { Alice: true },
+        },
+      }
+    );
+
+    const homeViewModel = selectHomeViewModel(store.getState(), getNow);
+
+    expect(homeViewModel).toEqual({
+      timeline: {
+        type: HomeViewModelType.LoadingTimeline,
+        info: 'Loading...',
       },
     });
   });

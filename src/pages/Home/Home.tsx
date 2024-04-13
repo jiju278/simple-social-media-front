@@ -18,6 +18,8 @@ function Home() {
 
   const timelineNode: ReactNode = (() => {
     switch (viewModel.timeline.type) {
+      case HomeViewModelType.LoadingTimeline:
+        return <p>{viewModel.timeline.info}</p>;
       case HomeViewModelType.NoTimeline:
         return null;
       case HomeViewModelType.EmptyTimeline:
