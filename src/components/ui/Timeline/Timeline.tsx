@@ -15,7 +15,7 @@ const Timeline = ({
   return (
     <div>
       {messages.map((msg) => (
-        <TimelineMessage message={msg} />
+        <TimelineMessage key={msg.id} message={msg} />
       ))}
     </div>
   );
