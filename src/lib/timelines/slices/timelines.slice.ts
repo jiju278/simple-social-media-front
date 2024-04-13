@@ -42,3 +42,9 @@ export const selectTimeline = (timelineId: string, state: RootState) =>
 
 export const selectIsUserTimelineLoading = (user: string, state: RootState) =>
   state.timelines.timelines.loadingTimelineByUser[user] ?? false;
+
+export const selectTimelineForUser = (user: string, state: RootState) =>
+  timelinesAdapter
+    .getSelectors()
+    .selectAll(state.timelines.timelines)
+    .filter((t) => t.user === user)[0];

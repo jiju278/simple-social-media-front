@@ -7,6 +7,9 @@ import {
 import { describe, test, expect } from 'vitest';
 
 const getNow = () => '2024-04-12T14:03.000Z';
+const stateBuilderWithAliceAuthenticated = stateBuilder().withAuthUser({
+  authUser: 'Alice',
+});
 
 describe('Home view model', () => {
   test('Example: there is no timeline in the store', () => {
@@ -21,7 +24,7 @@ describe('Home view model', () => {
   });
 
   test('Exemple: There is no message in the timeline', () => {
-    const initialState = stateBuilder()
+    const initialState = stateBuilderWithAliceAuthenticated
       .withTimeline({
         id: 'alice-timeline-id',
         messages: [],
@@ -42,7 +45,7 @@ describe('Home view model', () => {
   });
 
   test('There is one message in the timeline', () => {
-    const initialState = stateBuilder()
+    const initialState = stateBuilderWithAliceAuthenticated
       .withTimeline({
         id: 'alice-timeline-id',
         user: 'Alice',
@@ -80,7 +83,7 @@ describe('Home view model', () => {
   });
 
   test('There is multiple messages in the timeline', () => {
-    const initialState = stateBuilder()
+    const initialState = stateBuilderWithAliceAuthenticated
       .withTimeline({
         id: 'alice-timeline-id',
         user: 'Alice',
@@ -138,7 +141,7 @@ describe('Home view model', () => {
   });
 
   test('The timeline is loading', () => {
-    const initialState = stateBuilder()
+    const initialState = stateBuilderWithAliceAuthenticated
       .withLoadingTimelineOf({
         user: 'Alice',
       })

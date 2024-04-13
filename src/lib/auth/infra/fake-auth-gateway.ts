@@ -4,11 +4,16 @@ export class FakeAuthGateway implements AuthGateway {
   authUser!: string;
   willSucceedForAuthForUser!: string;
 
+  constructor(private readonly delay = 0) {}
+
   getAuthUser(): string {
     return this.authUser;
   }
 
-  async authenticate(): Promise<string> {
-    return this.willSucceedForAuthForUser;
+  authenticate(): Promise<string> {
+    this.authUser = this.willSucceedForAuthForUser;
+    return new Promise((resolve) =>
+      setTimeout(() => resolve(this.willSucceedForAuthForUser), this.delay)
+    );
   }
 }

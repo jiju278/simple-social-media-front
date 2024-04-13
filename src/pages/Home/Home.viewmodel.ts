@@ -1,8 +1,9 @@
+import { selectAuthUser } from '@/lib/auth/reducer';
 import { RootState } from '@/lib/create-store';
 import { selectMessages } from '@/lib/timelines/slices/messages.slice';
 import {
   selectIsUserTimelineLoading,
-  selectTimeline,
+  selectTimelineForUser,
 } from '@/lib/timelines/slices/timelines.slice';
 import { format as timeAgo } from 'timeago.js';
 
@@ -34,8 +35,12 @@ export const selectHomeViewModel = (
       };
 } => {
   const now = getNow();
-  const timeline = selectTimeline('alice-timeline-id', rootState);
-  const isUserTimelineLoading = selectIsUserTimelineLoading('Alice', rootState);
+  const authUser = selectAuthUser(rootState);
+  const timeline = selectTimelineForUser(authUser, rootState);
+  const isUserTimelineLoading = selectIsUserTimelineLoading(
+    authUser,
+    rootState
+  );
 
   if (isUserTimelineLoading) {
     return {

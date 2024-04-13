@@ -1,14 +1,39 @@
 import Button from '@/components/ui/Button/Button';
+import {
+  selectIsUserAuthenticated,
+  userAuthenticated,
+} from '@/lib/auth/reducer';
+import { authenticate } from '@/lib/auth/usecases/authenticate.usecase';
+import { AppDispatch } from '@/lib/create-store';
 import logo from '@assets/white_frame.png';
 import style from '@pages/Login/Login.module.css';
-import { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { FormEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const isUserAuthenticated = useSelector(selectIsUserAuthenticated);
+  const [authenticating, setAuthenticating] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setAuthenticating(true);
+    dispatch(authenticate())
+      .unwrap()
+      .finally(() => setAuthenticating(false));
   };
 
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      navigate('/');
+    }
+  }, [isUserAuthenticated, navigate]);
+
+  if (!userAuthenticated) {
+    return null;
+  }
   return (
     <div className={style.container}>
       <div className={style['logo-section']}>
@@ -26,7 +51,6 @@ const Login = () => {
               type="email"
               id="email"
               name="email"
-              required
             />
 
             <label className={style.label} htmlFor="password">
@@ -37,10 +61,12 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
-              required
             />
 
-            <Button color="primary" title="Sign in" />
+            <Button
+              color="primary"
+              title={authenticating ? 'Loading...' : 'Sign in'}
+            />
           </form>
           <p>
             Don't have an account? <Link to="/signup">Sign up</Link>
