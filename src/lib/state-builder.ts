@@ -21,20 +21,26 @@ const withNotLoadingTimelineOf = createAction<{ user: string }>(
   'withNotLoadingTimelineOf'
 );
 const withMessages = createAction<Message[]>('withMessages');
+const withAuthUser = createAction<{ authUser: string }>('withAuthUser');
 
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(withTimeline, (state, action) => {
-      timelinesAdapter.addOne(state.timelines, action.payload);
+      timelinesAdapter.addOne(state.timelines.timelines, action.payload);
     })
     .addCase(withLoadingTimelineOf, (state, action) => {
-      state.timelines.loadingTimelineByUser[action.payload.user] = true;
+      state.timelines.timelines.loadingTimelineByUser[action.payload.user] =
+        true;
     })
     .addCase(withNotLoadingTimelineOf, (state, action) => {
-      state.timelines.loadingTimelineByUser[action.payload.user] = false;
+      state.timelines.timelines.loadingTimelineByUser[action.payload.user] =
+        false;
     })
     .addCase(withMessages, (state, action) => {
-      messagesAdapter.addMany(state.messages, action.payload);
+      messagesAdapter.addMany(state.timelines.messages, action.payload);
+    })
+    .addCase(withAuthUser, (state, action) => {
+      state.auth.authUser = action.payload.authUser;
     });
 });
 
@@ -45,6 +51,7 @@ export const stateBuilder = (baseState = initialState) => {
       stateBuilder(reducer(baseState, actionCreator(payload)));
 
   return {
+    withAuthUser: reduce(withAuthUser),
     withTimeline: reduce(withTimeline),
     withLoadingTimelineOf: reduce(withLoadingTimelineOf),
     withNotLoadingTimelineOf: reduce(withNotLoadingTimelineOf),
