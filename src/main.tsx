@@ -7,12 +7,16 @@ import { FakeAuthGateway } from '@/lib/auth/infra/fake-auth-gateway.ts';
 import { FakeTimelineGateway } from '@/lib/timelines/infra/fake-timeline.gateway.ts';
 import { createRouter } from '@/router.tsx';
 import { FakeStorageAuthGateway } from '@/lib/auth/infra/fake-storage-auth.gateway.ts';
+import { FakeMessageGateway } from '@/lib/timelines/infra/fake-message.gateway.ts';
+import { RealDateProvider } from '@/lib/timelines/infra/real-date-provider.ts';
 
 const fakeAuthGateway = new FakeAuthGateway(500);
 fakeAuthGateway.willSucceedForAuthForUser = 'Alice';
 const authGateway = new FakeStorageAuthGateway(fakeAuthGateway);
-
 const timelineGateway = new FakeTimelineGateway(1000);
+const messageGateway = new FakeMessageGateway();
+const dateProvider = new RealDateProvider();
+
 timelineGateway.timelinesByUser.set('Alice', {
   id: 'alice-timeline-id',
   user: 'Alice',
@@ -35,6 +39,8 @@ timelineGateway.timelinesByUser.set('Alice', {
 const store = createStore({
   authGateway,
   timelineGateway,
+  messageGateway,
+  dateProvider,
 });
 
 const router = createRouter({ store });
