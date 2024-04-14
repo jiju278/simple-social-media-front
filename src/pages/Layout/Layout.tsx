@@ -4,8 +4,12 @@ import style from '@pages/Layout/Layout.module.css';
 import Badge from '@/components/ui/Badge/Badge';
 import Button from '@/components/ui/Button/Button';
 import Navbar from '@/components/ui/Navbar/Navbar';
+import Modal from '@/components/ui/Modal/Modal';
+import { useState } from 'react';
 
 function Layout() {
+  const [displayModal, setDisplayModal] = useState(true);
+
   return (
     <>
       <header className={style.container}>
@@ -17,8 +21,15 @@ function Layout() {
         <div className={style.sideNav}>
           <Badge userId="" username="" />
           <Navbar />
-          <Button color="primary" title="Create new post" />
-          <Button color="dark" title="Sign out" />
+          <Button
+            color="primary"
+            title="Create new post"
+            onClick={() => setDisplayModal(true)}
+          />
+          {displayModal && (
+            <Modal onClose={() => setDisplayModal(!displayModal)} />
+          )}
+          <Button color="dark" title="Sign out" onClick={() => {}} />
         </div>
 
         <main className={style.mainContent}>

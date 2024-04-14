@@ -38,6 +38,8 @@ describe("Feature: Retrieving authenticated user's timeline", () => {
         },
       ],
     });
+
+    // test loading state
     const timelineRetrieving =
       timelineFixture.whenRetrievingAuthenticatedUserTimeline();
     timelineFixture.thenTheTimelineOfUserShouldBeLoading('Alice');
