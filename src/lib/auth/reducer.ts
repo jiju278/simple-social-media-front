@@ -10,6 +10,8 @@ export const userAuthenticated = createAction<{ authUser: AuthUser }>(
   'auth/userAuthenticated'
 );
 
+export const signOut = createAction('auth/signOut');
+
 export const reducer = createReducer<AuthState>(
   {
     authUser: undefined,
@@ -21,6 +23,9 @@ export const reducer = createReducer<AuthState>(
       })
       .addCase(authenticate.fulfilled, (state, action) => {
         state.authUser = action.payload;
+      })
+      .addCase(signOut, (state) => {
+        state.authUser = undefined;
       });
   }
 );

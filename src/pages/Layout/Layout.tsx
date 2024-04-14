@@ -6,9 +6,14 @@ import Button from '@/components/ui/Button/Button';
 import Navbar from '@/components/ui/Navbar/Navbar';
 import Modal from '@/components/ui/Modal/Modal';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthUser, signOut } from '@/lib/auth/reducer';
+import { AppDispatch } from '@/lib/create-store';
 
 function Layout() {
   const [displayModal, setDisplayModal] = useState(false);
+  const authUser = useSelector(selectAuthUser);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <>
@@ -19,7 +24,7 @@ function Layout() {
 
       <div className={style.pageContent}>
         <div className={style.sideNav}>
-          <Badge userId="" username="" />
+          <Badge userId={authUser} username={authUser} />
           <Navbar />
           <Button
             color="primary"
@@ -29,7 +34,14 @@ function Layout() {
           {displayModal && (
             <Modal onClose={() => setDisplayModal(!displayModal)} />
           )}
-          <Button color="dark" title="Sign out" onClick={() => {}} />
+          <Button
+            color="dark"
+            title="Sign out"
+            onClick={() => {
+              localStorage.clear();
+              dispatch(signOut());
+            }}
+          />
         </div>
 
         <main className={style.mainContent}>
