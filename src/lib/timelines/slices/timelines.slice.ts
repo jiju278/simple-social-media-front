@@ -25,10 +25,17 @@ export const timelinesSlice = createSlice({
         state.loadingTimelineByUser[action.payload.authUser] = true;
       })
       .addCase(postMessage.pending, (state, action) => {
+        const timeline = timelinesAdapter
+          .getSelectors()
+          .selectById(state, action.meta.arg.timelineId);
+
+        if (!timeline) {
+          return;
+        }
         timelinesAdapter.updateOne(state, {
-          id: action.meta.arg.timelineId,
+          id: timeline.id,
           changes: {
-            messages: [action.meta.arg.messageId],
+            messages: [...timeline.messages, action.meta.arg.messageId],
           },
         });
       })

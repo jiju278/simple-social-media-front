@@ -8,7 +8,7 @@ import Modal from '@/components/ui/Modal/Modal';
 import { useState } from 'react';
 
 function Layout() {
-  const [displayModal, setDisplayModal] = useState(true);
+  const [displayModal, setDisplayModal] = useState(false);
 
   return (
     <>

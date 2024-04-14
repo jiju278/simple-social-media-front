@@ -1,6 +1,6 @@
 import { selectAuthUser } from '@/lib/auth/reducer';
 import { RootState } from '@/lib/create-store';
-import { selectMessages } from '@/lib/timelines/slices/messages.slice';
+import { selectMessagesOrderedByPublicationDateDesc } from '@/lib/timelines/slices/messages.slice';
 import {
   selectIsUserTimelineLoading,
   selectTimelineForUser,
@@ -66,7 +66,10 @@ export const selectHomeViewModel = (
     };
   }
 
-  const messages = selectMessages(timeline.messages, rootState).map((msg) => ({
+  const messages = selectMessagesOrderedByPublicationDateDesc(
+    timeline.messages,
+    rootState
+  ).map((msg) => ({
     id: msg.id,
     userId: msg.author,
     username: msg.author,

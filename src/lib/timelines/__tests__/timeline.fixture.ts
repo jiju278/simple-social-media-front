@@ -4,7 +4,6 @@ import { stateBuilder, stateBuilderProvider } from '@/lib/state-builder';
 import { FakeMessageGateway } from '@/lib/timelines/infra/fake-message.gateway';
 import { FakeTimelineGateway } from '@/lib/timelines/infra/fake-timeline.gateway';
 import { StubDateProvider } from '@/lib/timelines/infra/stub-date-provider';
-import { Timeline } from '@/lib/timelines/model/timeline.entity';
 import { selectIsUserTimelineLoading } from '@/lib/timelines/slices/timelines.slice';
 import { getAuthUserTimeline } from '@/lib/timelines/usecases/get-auth-user-timeline.usecase';
 import {
@@ -13,7 +12,7 @@ import {
 } from '@/lib/timelines/usecases/post-message.usecase';
 import { expect } from 'vitest';
 
-type ExpectedTimeline = {
+type Timeline = {
   id: string;
   user: string;
   messages: {
@@ -54,7 +53,12 @@ export const createTimelineFixture = (
     givenTimeline(timeline: Timeline) {
       testStateBuilderProvider.setState((builder) =>
         builder
-          .withTimeline(timeline)
+          .withTimeline({
+            id: timeline.id,
+            user: timeline.user,
+            messages: timeline.messages.map((m) => m.id),
+          })
+          .withMessages(timeline.messages)
           .withNotLoadingTimelineOf({ user: timeline.user })
       );
     },
@@ -75,7 +79,7 @@ export const createTimelineFixture = (
       await store.dispatch(getAuthUserTimeline());
     },
 
-    thenTheReceivedTimelineShouldBe(expectedTimeline: ExpectedTimeline) {
+    thenTheReceivedTimelineShouldBe(expectedTimeline: Timeline) {
       this.thenTimelineShouldBe(expectedTimeline);
     },
 
@@ -97,7 +101,7 @@ export const createTimelineFixture = (
       expect(messageGateway.lastPostedMessage).toEqual(expectedPostedMessage);
     },
 
-    thenTimelineShouldBe(expectedTimeline: ExpectedTimeline) {
+    thenTimelineShouldBe(expectedTimeline: Timeline) {
       const expectedState = stateBuilder(testStateBuilderProvider.getState())
         .withAuthUser({ authUser: expectedTimeline.user })
         .withTimeline({

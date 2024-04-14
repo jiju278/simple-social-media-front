@@ -2,6 +2,12 @@
 
 import React, { useState } from 'react';
 import styles from './Modal.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/lib/create-store';
+import { nanoid } from '@reduxjs/toolkit';
+import { postMessage } from '@/lib/timelines/usecases/post-message.usecase';
+import { selectAuthUser } from '@/lib/auth/reducer';
+import { selectTimelineForUser } from '@/lib/timelines/slices/timelines.slice';
 
 interface ModalProps {
   onClose: () => void;
@@ -9,9 +15,18 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ onClose }) => {
   const [text, setText] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+
+  const timelineId = useSelector<RootState, string>((state) => {
+    const authUser = selectAuthUser(state);
+    const timeline = selectTimelineForUser(authUser, state);
+    return timeline.id;
+  });
+  const messageId = nanoid(5);
 
   const handlePost = () => {
-    console.log('Text posted:', text);
+    dispatch(postMessage({ messageId, text, timelineId }));
+    setText('');
     onClose();
   };
 
@@ -22,6 +37,7 @@ const Modal: React.FC<ModalProps> = ({ onClose }) => {
           className={styles['modal-textarea']}
           value={text}
           onChange={(e) => setText(e.target.value)}
+          required
         />
         <div className={styles['button-container']}>
           <button className={styles['cancel-button']} onClick={onClose}>

@@ -82,7 +82,7 @@ describe('Home view model', () => {
     });
   });
 
-  test('There is multiple messages in the timeline', () => {
+  test('There is multiple messages in the timeline. Messages are displayed by published date desc', () => {
     const initialState = stateBuilderWithAliceAuthenticated
       .withTimeline({
         id: 'alice-timeline-id',
@@ -120,20 +120,20 @@ describe('Home view model', () => {
         type: HomeViewModelType.WithMessages,
         messages: [
           {
-            id: 'msg1-id',
-            username: 'Bob',
-            userId: 'Bob',
-            profilePictureUrl: 'https://picsum.photos/200?random=Bob',
-            publishedAt: '1 hour ago',
-            text: "Hi it's Bob",
-          },
-          {
             id: 'msg2-id',
             username: 'Alice',
             userId: 'Alice',
             profilePictureUrl: 'https://picsum.photos/200?random=Alice',
             publishedAt: '38 minutes ago',
             text: 'Hi Bob!',
+          },
+          {
+            id: 'msg1-id',
+            username: 'Bob',
+            userId: 'Bob',
+            profilePictureUrl: 'https://picsum.photos/200?random=Bob',
+            publishedAt: '1 hour ago',
+            text: "Hi it's Bob",
           },
         ],
       },

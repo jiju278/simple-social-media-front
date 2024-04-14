@@ -22,5 +22,14 @@ export const messagesSlice = createSlice({
 export const selectMessage = (id: string, state: RootState) =>
   messagesAdapter.getSelectors().selectById(state.timelines.messages, id);
 
-export const selectMessages = (ids: string[], state: RootState) =>
-  ids.map((id) => selectMessage(id, state)).filter(Boolean);
+export const selectMessagesOrderedByPublicationDateDesc = (
+  ids: string[],
+  state: RootState
+) => {
+  const messages = ids.map((id) => selectMessage(id, state)).filter(Boolean);
+
+  return messages.sort(
+    (mA, mB) =>
+      new Date(mB.publishedAt).getTime() - new Date(mA.publishedAt).getTime()
+  );
+};
